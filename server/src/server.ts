@@ -106,7 +106,7 @@ connection.onDidChangeConfiguration(change => {
 		documentSettings.clear();
 	} else {
 		globalSettings = <ExampleSettings>(
-			(change.settings.AsmXLanguageServer || defaultSettings)
+			(change.settings.languageServer || defaultSettings)
 		);
 	}
 
@@ -122,7 +122,7 @@ function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 	if (!result) {
 		result = connection.workspace.getConfiguration({
 			scopeUri: resource,
-			section: 'AsmXLanguageServer'
+			section: 'languageServer'
 		});
 
 		documentSettings.set(resource, result);
@@ -153,7 +153,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	let m: RegExpExecArray | null;
 	let problems = 0;
 	const diagnostics: Diagnostic[] = [];
-
 
 	let patternValidVariableName = /(?<=@set|@Set|@SET)\s+(\b[A-Z0-9_]*\b)/g;
 	let patternValidVariableNameTest = /(?<=@set|@Set|@SET)\s([^a-z][A-Z0-9_]*)/;
@@ -193,6 +192,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 						}),
 						
 					},
+
 					message: 'You should make the variable name in lower case or lower style.'
 				}
 			];
